@@ -7,6 +7,7 @@
 ### Categorical LUCAS Properties
 
 #### Climate zones
+
 1 Boreal and boreal to temperate
 2 Atlantic
 3 Sub-oceanic
@@ -17,10 +18,12 @@
 8 Mediterranean temperate and sub-oceanic
 9 Mediterranean mountainous
 
+
 #### Land Cover - LC
+
 A Artificial land
-B Cropland, 
-C Forest,
+B Cropland
+C Forest
 D Scrubland
 E Grassland
 F Bareland
@@ -30,7 +33,7 @@ H Wetlands
 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Glossary:Land_cover>
 
 ###### Cropland
-Cereals
+**Cereals**
 B11 Common wheat
 B12 Durum wheat
 B13 Barley
@@ -41,12 +44,12 @@ B17 Rice
 B18 Triticale
 B19 Other cereals
 
-Root crops
+**Root crops**
 B21 Potatoes
 B22 Sugar beet
 B23 Other root crops
 
-Non-permanent industrial crops
+**Non-permanent industrial crops**
 B31 Sunflower
 B32 Rape and turnip rape
 B33 Soya
@@ -54,20 +57,20 @@ B34 Cotton
 B35 Other fibre and oleaginous crops
 B36 Tobacco
 
-Dry pulses, vegetables and flowers
+**Dry pulses, vegetables and flowers**
 B41 Dry pulses
 B42 Tomatoes
 B43 Other fresh vegetables
 B45 Strawberries
 
-Fodder crops
+**Fodder crops**
 B51 Clovers
 B52 Lucerne
 B53 Other Leguminous and mixtures for fodder
 B54 Mix of cereals
 B55 Temporary grassland
 
-Permanent crops 
+**Permanent crops**
 B71 Apple fruit
 B72 Pear fruit
 B73 Cherry fruit

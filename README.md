@@ -32,7 +32,7 @@ H Wetlands
 
 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Glossary:Land_cover>
 
-###### Cropland
+##### Cropland
 **Cereals**
 B11 Common wheat
 B12 Durum wheat
@@ -119,3 +119,7 @@ U370 	Residential
 U400 	Unused 
 
 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Glossary:Land_use>
+
+#### NUTS Code
+
+<https://ec.europa.eu/eurostat/web/nuts/nuts-maps>

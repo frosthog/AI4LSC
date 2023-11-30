@@ -1,0 +1,55 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+
+.button-cont {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-cont form div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.button-cont label {
+    margin-right: 10px;
+    width: 100px;
+}
+
+.button-cont input[type="text"] {
+    flex-grow: 1; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.button-cont button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background-color 0.3s;
+}
+
+.button-cont button:hover {
+    background-color: #005ebd;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI 4 LSC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.139.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.139.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.139.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script type="module" src="UI.js"></script>
+    <script type="module" src="main.js"></script>
+    
+    <div class="button-cont">
+        <form>
+            <div>
+                <label for="latID">LATITUDE: </label>
+                <input type="text" id="latID" name="latitude" required />
+            </div>
+            <div>
+                <label for="longID">LONGITUDE: </label>
+                <input type="text" id="longID" name="longitude" required />
+            </div>
+            <div>
+                <button type="submit">Create new point</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

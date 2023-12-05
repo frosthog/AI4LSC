@@ -42,6 +42,38 @@ function formatWithPrecision(number, precision)
     return Number.parseFloat(number).toFixed(precision);
 }
 
+function quadraticRegression(x, y)
+{
+    const x1 = x[0], x2 = x[1], x3 = x[2];
+    const y1 = y[0], y2 = y[1], y3 = y[2];
+
+    const a = ((y3 - ((x3 * (y2 - y1) + x2 * y1 - x1 * y2) / (x2 - x1))) / (x3 * (x3 - x1 - x2) + x1 * x2));
+    const b = ((y2 - y1) / (x2 - x1)) - a * (x1 + x2);
+    const c = (y1 - a * x1 * x1 - b * x1);
+
+    return {a, b, c};
+}
+
+function predictQuadraticValue(year, a, b, c)
+{
+    return a * year * year + b * year + c;
+}
+
+function clamp(value, min, max)
+{
+    return Math.min(Math.max(value, min), max);
+}
+
+function predictValueFromPattern(yearToPredict, knownYears, knownValues, min, max, randomFactor)
+{
+    const { a, b, c } = quadraticRegression(knownYears, knownValues);
+
+    let predicted = predictQuadraticValue(yearToPredict, a, b, c);
+    predicted *= randomFactor;
+    predicted = clamp(predicted, min, max);
+
+    return predicted;
+}
 
 function handleCSVData(data)
 {
@@ -89,7 +121,8 @@ function handleCSVData(data)
             existingYears.add(row.SURVEY_YEAR);
             features.forEach(feature => {
                 let value = parseFloat(row[feature]);
-                if (!isNaN(value)) {
+                if (!isNaN(value))
+                {
                     minValues[feature] = minValues[feature] === null ? value : Math.min(minValues[feature], value);
                     maxValues[feature] = maxValues[feature] === null ? value : Math.max(maxValues[feature], value);
                 }
@@ -106,13 +139,15 @@ function handleCSVData(data)
 
         let allFeaturesValid = features.every(feature => minValues[feature] !== null && maxValues[feature] !== null);
 
-        if (allFeaturesValid) {
+        if (allFeaturesValid)
+        {
             for (let year = 2009; year <= 2050; year++)
             {
                 if (!existingYears.has(year.toString()))
                 {
                     let newRow = { POINT_ID: pointId, SURVEY_YEAR: year };
-                    features.forEach(feature => {
+                    features.forEach(feature =>
+                    {
                         newRow[feature] = formatWithPrecision(getRandomValueInRange(minValues[feature], maxValues[feature]), 5);
                     });
 

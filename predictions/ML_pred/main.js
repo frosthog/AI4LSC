@@ -181,7 +181,7 @@ function handleCSVData(data)
 
 function main()
 {
-    loadCSVData('test.csv')
+    loadCSVData('normalized_clean.csv')
         .then(data => {
             handleCSVData(data);
         })

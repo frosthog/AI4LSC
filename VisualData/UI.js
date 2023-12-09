@@ -31,5 +31,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function createPointUI(lat, lon)
 {
     console.log(`Creating point at Latitude: ${lat}, Longitude: ${lon}`);
-    createNewPoint(lat, lon, 1.51);
+    createNewPoint(lat, lon, 1.501);
 }

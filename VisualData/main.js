@@ -28,7 +28,9 @@ directionalLight.visible = isDirectionalLightOn;
 scene.add(directionalLight);
 
 const textureLoader = new THREE.TextureLoader();
-const colorTexture = textureLoader.load('textures/earthmap.jpg');
+export const colorTexture = textureLoader.load('textures/earthmap.jpg');
+export const colorTexture2 = textureLoader.load('textures/earthmap_blackwhite.jpg');
+export const colorTexture3 = textureLoader.load('textures/earthmap_noTex.jpg');
 const bumpTexture = textureLoader.load('textures/earthmap_bump.jpg');
 const specularTexture = textureLoader.load('textures/earthmap_spec.jpg');
 
@@ -77,6 +79,12 @@ function animate()
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
+}
+
+export function changeEarthTexture(newTexture)
+{
+    earth.material.map = newTexture;
+    earth.material.needsUpdate = true;
 }
 
 function onWindowResize()

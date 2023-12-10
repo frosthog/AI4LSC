@@ -1,4 +1,5 @@
-import { createNewPoint, displayData, toggleDirectionalLight, setSphereSize } from './main.js';
+import { createNewPoint, displayData, toggleDirectionalLight, setSphereSize, changeEarthTexture,
+            colorTexture, colorTexture2, colorTexture3 } from './main.js';
 import {  } from './main.js';
 
 export let selectedYear = 2009;
@@ -211,3 +212,27 @@ document.addEventListener('DOMContentLoaded', () => {
         setSphereSize(newSize, selectedYear);
     });
 });
+
+document.querySelectorAll('.image-button').forEach(button => {
+
+    document.getElementById('imageBtn1').addEventListener('click', () => {
+        changeEarthTexture(colorTexture);
+        updateSelectedButton('imageBtn1');
+    });
+
+    document.getElementById('imageBtn2').addEventListener('click', () => {
+        changeEarthTexture(colorTexture2);
+        updateSelectedButton('imageBtn2');
+    });
+
+    document.getElementById('imageBtn3').addEventListener('click', () => {
+        changeEarthTexture(colorTexture3);
+        updateSelectedButton('imageBtn3');
+    });
+});
+
+function updateSelectedButton(buttonId)
+{
+    document.querySelectorAll('.image-button').forEach(btn => btn.classList.remove('selected'));
+    document.getElementById(buttonId).classList.add('selected');
+}

@@ -1,19 +1,25 @@
 
+@font-face {
+    font-family: 'Exo2Black';
+    src: url('Exo_2/static/Exo2-Black.ttf') format('truetype');
+}
+
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    font-family: 'Exo2Black', sans-serif;
 }
-
 
 .button-cont {
     position: absolute;
-    top: 10px;
+    top: 100px;
     left: 10px;
-    background: #fff;
+    background: rgba(41, 41, 41, 0.795);
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 1px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
 }
 
 .button-cont form div {
@@ -36,7 +42,7 @@ body {
 }
 
 .button-cont button {
-    background-color: #007bff;
+    background-color: #004fa3;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -44,7 +50,7 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    border-radius: 4px;
+    border-radius: 1px;
     cursor: pointer;
     vertical-align: middle;
     transition: background-color 0.3s;
@@ -53,3 +59,200 @@ body {
 .button-cont button:hover {
     background-color: #005ebd;
 }
+
+.slider-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(41, 41, 41, 0.795);
+    padding: 5px 10px;
+    border-radius: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 60%;
+}
+
+.slider-container label {
+    display: block;
+    text-align: center;
+    margin-bottom: 2px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.slider-container input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 2px;
+    background: #fcfafa;
+    outline: none;
+    opacity: 0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 25px;
+    border-radius: 5%;
+    background: #1569b8;
+    cursor: pointer;
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.feature-buttons {
+    position: absolute;
+    top: 270px;
+    left: 10px;
+    background: rgba(41, 41, 41, 0.795);
+    padding: 10px;
+    border-radius: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 20px);
+    max-width: 307px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: white;
+    padding-top: 20px;
+}
+
+.feature-buttons button {
+    background-color: #004fa3;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.feature-buttons button:hover {
+    background-color: #005ebd;
+}
+
+#textContainer {
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 1px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feature-buttons input[type="radio"] {
+    display: none;
+}
+
+.feature-buttons label {
+    background-color: #004fa3;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+.feature-buttons label:hover {
+    background-color: #005ebd;
+}
+
+.feature-buttons label.selected {
+    background-color: #288efa;
+}
+
+.feature-buttons button.selected {
+    background-color: #288efa;
+}
+
+.control-panel {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(41, 41, 41, 0.795);
+    padding: 10px;
+    border-radius: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 200px;
+}
+
+.control-panel button {
+    background-color: #004fa3;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.control-panel button:hover {
+    background-color: #005ebd;
+}
+
+.control-panel .size-slider-container {
+    width: 100%;
+}
+
+.control-panel .size-slider-container label {
+    font-size: 14px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.control-panel .size-slider-container input[type="range"] {
+    width: 100%; 
+    cursor: pointer;
+}
+
+.control-panel .image-buttons {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px; /* Space between image buttons and toggle light button */
+}
+
+.control-panel .image-button {
+    background-color: #333; /* Default background color */
+    border: 1px solid #fff; /* White border for the buttons */
+    width: 50px; /* Square shape */
+    height: 50px;
+    cursor: pointer;
+    margin: 0 5px; /* Space between buttons */
+    background-size: cover; /* Ensure images cover the whole button */
+    background-position: center; /* Center images */
+}
+
+.control-panel .image-button.selected {
+    border-color: #00ff00; /* Highlight color for selected button */
+}
+
+/* Specific background images for each button */
+#imageBtn1 { background-image: url('textures/mini-earth.PNG'); }
+#imageBtn2 { background-image: url('textures/mini-earth-blackwhite.png'); }
+#imageBtn3 { background-image: url('textures/mini-earth-noTex.png'); }

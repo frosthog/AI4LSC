@@ -29,5 +29,81 @@
         </form>
     </div>
 
+    <div class="feature-buttons">
+
+        <button id="simpleValueBtn" class="top-button">VALUE</button>
+        <button id="comparisonBtn" class="top-button">COMPARISON</button>
+        <button id="additionBtn" class="top-button">ADDITION</button>
+
+        <div id="textContainer"></div>
+
+
+        <input type="radio" id="Coarse" name="feature" value="Coarse">
+        <label for="Coarse">COARSE</label>
+
+        <input type="radio" id="Clay" name="feature" value="Clay">
+        <label for="Clay">CLAY</label>
+
+        <input type="radio" id="Silt" name="feature" value="Silt">
+        <label for="Silt">SILT</label>
+
+        <input type="radio" id="Sand" name="feature" value="Sand">
+        <label for="Sand">SAND</label>
+
+        <input type="radio" id="pH_H2O" name="feature" value="pH_H2O">
+        <label for="pH_H2O">PH_H2O</label>
+
+        <input type="radio" id="pH_CaCl2" name="feature" value="pH_CaCl2">
+        <label for="pH_CaCl2">PH_CACL2</label>
+
+        <input type="radio" id="OC" name="feature" value="OC">
+        <label for="OC">OC</label>
+
+        <input type="radio" id="CaCO3" name="feature" value="CaCO3">
+        <label for="CaCO3">CACO3</label>
+
+        <input type="radio" id="N" name="feature" value="N">
+        <label for="N">N</label>
+
+        <input type="radio" id="P" name="feature" value="P">
+        <label for="P">P</label>
+
+        <input type="radio" id="K" name="feature" value="K">
+        <label for="K">K</label>
+
+        <input type="radio" id="CEC" name="feature" value="CEC">
+        <label for="CEC">CEC</label>
+
+        <input type="radio" id="Elevation" name="feature" value="Elevation">
+        <label for="Elevation">ELEVATION</label>
+
+        <input type="radio" id="Slope" name="feature" value="Slope">
+        <label for="Slope">SLOPE</label>
+
+        <input type="radio" id="EC" name="feature" value="EC">
+        <label for="EC">EC</label>
+
+    </div>
+    
+
+    <div class="slider-container">
+        <label for="yearSlider"><span id="yearLabel">2009</span></label>
+        <input type="range" id="yearSlider" name="year" min="2009" max="2050" value="2009" step="1">
+    </div>
+
+    <div class="control-panel">
+        <div class="image-buttons">
+            <button id="imageBtn1" class="image-button selected"></button>
+            <button id="imageBtn2" class="image-button"></button>
+            <button id="imageBtn3" class="image-button"></button>
+        </div>
+        <button id="toggleLight">Toggle Light</button>
+        <div class="size-slider-container">
+            <label for="sphereSizeSlider">Sphere Size:</label>
+            <input type="range" id="sphereSizeSlider" min="0.001" max="0.005" step="0.0001" value="0.003">
+        </div>
+    </div>
+    
+
 </body>
 </html>

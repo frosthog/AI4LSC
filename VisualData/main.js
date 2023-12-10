@@ -125,6 +125,7 @@ function latLongToVector3(lat, long, radius)
     return new THREE.Vector3(x, y, z);
 }
 
+
 function createInstances(data, radius)
 {
     console.log("IN create Instances");
@@ -137,21 +138,34 @@ function createInstances(data, radius)
         return;
     }
 
-    console.log(`Creating new spheres with size: ${sphereSize}`);
     sphereGeometry = new THREE.SphereGeometry(sphereSize, 8, 8);
+    sphereMaterial = new THREE.MeshBasicMaterial();
 
+    const instancesCount = data.length;
+    currentInstancedMesh = new THREE.InstancedMesh(sphereGeometry, sphereMaterial, instancesCount);
+
+    let i = 0;
     data.forEach(point => {
         if (!isNaN(point.LAT) && !isNaN(point.LONG) && selectedFeature in point)
         {
             const position = latLongToVector3(point.LAT, point.LONG, radius);
             const featureValue = point[selectedFeature];
             const color = new THREE.Color(featureValue, 0, 1 - featureValue);
-            const pointMesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial({ color }));
-            pointMesh.position.copy(position);
-            scene.add(pointMesh);
+
+            const matrix = new THREE.Matrix4();
+            matrix.setPosition(position);
+            currentInstancedMesh.setColorAt(i, color);
+            currentInstancedMesh.setMatrixAt(i, matrix);
+            i++;
         }
     });
+
+    currentInstancedMesh.instanceMatrix.needsUpdate = true;
+    currentInstancedMesh.instanceColor.needsUpdate = true;
+
+    scene.add(currentInstancedMesh);
 }
+
 
 function removeAllInstances()
 {
@@ -255,6 +269,7 @@ export function displayData(year)
 {
     if (!allCSVData)
     {
+        console.log("loadCSV");
         loadCSV('prediction.csv').then(csvData => {
             allCSVData = csvData;
             processAndDisplayData(year);

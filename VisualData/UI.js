@@ -61,139 +61,194 @@ function handleYearChange(year)
 export let buttonStates = {};
 export let featureStates = {};
 export let selectedMode = 'simpleValueBtn';
+export let selectedFeatures = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     const topButtons = document.querySelectorAll('.top-button');
     const featureButtons = document.querySelectorAll('input[name="feature"]');
     const textContainer = document.getElementById('textContainer');
-    let selectedFeatures = [];
 
     topButtons.forEach(button => {
         buttonStates[button.id] = false;
+        button.addEventListener('click', handleTopButtonClick);
     });
 
     featureButtons.forEach(button => {
         featureStates[button.value.toLowerCase()] = false;
+        button.addEventListener('click', handleFeatureButtonClick);
     });
 
-    topButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            selectedMode = this.id;
-    
-            Object.keys(buttonStates).forEach(key => {
-                buttonStates[key] = false;
-            });
-            buttonStates[this.id] = true;
-    
-            topButtons.forEach(btn => btn.classList.remove('selected'));
-            this.classList.add('selected');
-    
-            if (selectedMode === 'simpleValueBtn')
-            {
-                selectedFeatures = ['coarse'];
-            }
-            else if (selectedMode === 'comparisonBtn' || selectedMode === 'additionBtn')
-            {
-                const secondFeature = featureButtons[1]?.value.toLowerCase();
-                selectedFeatures = ['coarse', secondFeature].filter(Boolean);
-            }
-    
-            updateFeatureSelection();
-            updateTextContainer(this.id);
-    
-            displayData(selectedYear);
-        });
-    });
+    buttonStates['simpleValueBtn'] = true;
+    document.getElementById('simpleValueBtn').classList.add('selected');
+    selectedFeatures = ['coarse'];
+    featureStates['coarse'] = true;
+    updateTextContainer('simpleValueBtn');
+    updateFeatureSelection();
+    displayData(selectedYear);
+});
 
-    featureButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const featureName = button.value.toLowerCase();
-            const index = selectedFeatures.indexOf(featureName);
-    
-            Object.keys(featureStates).forEach(key => {
-                featureStates[key] = false;
-            });
-    
-            if (selectedMode === 'simpleValueBtn')
-            {
-                selectedFeatures = [featureName];
-                featureStates[featureName] = true;
-            }
-            else if (selectedMode === 'comparisonBtn')
-            {
-                if (index === -1)
-                {
-                    if (selectedFeatures.length < 2)
-                    {
-                        selectedFeatures.push(featureName);
-                        featureStates[featureName] = true;
-                    }
-                }
-                else
-                {
-                    selectedFeatures.splice(index, 1);
-                }
-            }
-            else if (selectedMode === 'additionBtn')
-            {
-                if (index === -1)
-                {
-                    selectedFeatures.push(featureName);
-                    featureStates[featureName] = true;
-                }
-                else
-                {
-                    selectedFeatures.splice(index, 1);
-                }
-            }
-            updateFeatureSelection();
-            displayData(selectedYear);
-        });
-    });
-    
+function handleTopButtonClick(event)
+{
+    const buttonId = event.target.id;
+    selectedMode = buttonId;
 
-    function updateFeatureSelection()
+    updateButtonStates(buttonId);
+    updateFeatureSelectionMode();
+    updateFeatureSelection();
+    updateTextContainer(buttonId);
+
+    displayData(selectedYear);
+}
+
+function updateButtonStates(selectedButtonId)
+{
+    Object.keys(buttonStates).forEach(key => buttonStates[key] = false);
+    buttonStates[selectedButtonId] = true;
+
+    const topButtons = document.querySelectorAll('.top-button');
+    topButtons.forEach(btn => btn.classList.remove('selected'));
+    document.getElementById(selectedButtonId).classList.add('selected');
+}
+
+function updateFeatureSelectionMode()
+{
+    if (selectedMode === 'simpleValueBtn')
     {
-        featureButtons.forEach(button => {
-            const label = document.querySelector(`label[for="${button.id}"]`);
-            if (selectedFeatures.includes(button.value.toLowerCase()))
+        if (selectedFeatures.length === 0)
+        {
+            selectedFeatures = featureStates['coarse'] ? ['coarse'] : [Object.keys(featureStates)[0]];
+        }
+        else
+        {
+            selectedFeatures = selectedFeatures.slice(0, 1);
+        }
+        updateFeatureStatesForValueMode();
+    }
+    else if (selectedMode === 'comparisonBtn')
+    {
+        selectedFeatures = ['coarse', 'clay'];
+        updateFeatureStatesForComparisonMode();
+    }
+    else if (selectedMode === 'additionBtn')
+    {
+
+    }
+}
+
+function updateFeatureStatesForValueMode()
+{
+    Object.keys(featureStates).forEach(feature => {
+        featureStates[feature] = false;
+    });
+    featureStates[selectedFeatures[0]] = true;
+}
+
+function updateFeatureStatesForComparisonMode()
+{
+    Object.keys(featureStates).forEach(feature => {
+        featureStates[feature] = (selectedFeatures.includes(feature));
+    });
+}
+
+function handleFeatureButtonClick(event)
+{
+    const featureName = event.target.value.toLowerCase();
+    toggleFeatureSelection(featureName);
+    updateFeatureSelection();
+    displayData(selectedYear);
+}
+
+function toggleFeatureSelection(featureName)
+{
+    const index = selectedFeatures.indexOf(featureName);
+
+    if (selectedMode === 'simpleValueBtn')
+    {
+        selectedFeatures = [featureName];
+        updateFeatureStates(featureName);
+    }
+    else if (selectedMode === 'comparisonBtn')
+    {
+        if (index === -1)
+        {
+            if (selectedFeatures.length < 2)
             {
-                label.classList.add('selected');
+                selectedFeatures.push(featureName);
             }
             else
             {
-                label.classList.remove('selected');
+                selectedFeatures.shift();
+                selectedFeatures.push(featureName);
             }
-        });
-    }
-
-    function updateTextContainer(selectedButtonId)
-    {
-        let text = "";
-        switch (selectedButtonId)
-        {
-            case 'simpleValueBtn':
-                text = "Display color for each feature [choose only one feature]";
-                break;
-            case 'comparisonBtn':
-                text = "Display the difference between 2 features [choose 2 features]";
-                break;
-            case 'additionBtn':
-                text = "Display a mix of features [select several features]";
-                break;
-            default:
-                text = "Select a button.";
         }
-        textContainer.textContent = text;
+        else
+        {
+            selectedFeatures.splice(index, 1);
+            if (selectedFeatures.length < 2)
+            {
+                const remainingFeature = Object.keys(featureStates).find(key => featureStates[key] && key !== featureName);
+                if (remainingFeature)
+                {
+                    selectedFeatures.push(remainingFeature);
+                }
+            }
+        }
+        updateFeatureStatesForComparison();
     }
+    else if (selectedMode === 'additionBtn')
+    {
 
-    const valueButton = document.getElementById('simpleValueBtn');
-    buttonStates[valueButton.id] = true;
-    valueButton.classList.add('selected');
-    updateTextContainer(valueButton.id);
-    updateFeatureSelection();
-});
+    }
+    //console.log("Selected Features:", selectedFeatures);
+}
 
+function updateFeatureStates(selectedFeature)
+{
+    Object.keys(featureStates).forEach(key => featureStates[key] = false);
+    featureStates[selectedFeature] = true;
+}
+
+function updateFeatureStatesForComparison()
+{
+    Object.keys(featureStates).forEach(key => featureStates[key] = false);
+    selectedFeatures.forEach(feature => featureStates[feature] = true);
+}
+
+
+function updateFeatureSelection()
+{
+    const featureButtons = document.querySelectorAll('input[name="feature"]');
+    featureButtons.forEach(button => {
+        const label = document.querySelector(`label[for="${button.id}"]`);
+        if (selectedFeatures.includes(button.value.toLowerCase()))
+        {
+            label.classList.add('selected');
+        }
+        else
+        {
+            label.classList.remove('selected');
+        }
+    });
+}
+
+function updateTextContainer(selectedButtonId)
+{
+    let text = "";
+    switch (selectedButtonId) {
+        case 'simpleValueBtn':
+            text = "Display color for each feature [choose only one feature]";
+            break;
+        case 'comparisonBtn':
+            text = "Display the difference between 2 features [choose 2 features]";
+            break;
+        case 'additionBtn':
+            text = "Display a mix of features [select several features]";
+            break;
+        default:
+            text = "Select a button.";
+    }
+    textContainer.textContent = text;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const toggleLightBtn = document.getElementById('toggleLight');
@@ -208,13 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
     sphereSizeSlider.addEventListener('change', function()
     {
         const newSize = parseFloat(this.value);
-        console.log(`New Sphere Size: ${newSize}`);
         setSphereSize(newSize, selectedYear);
     });
 });
 
 document.querySelectorAll('.image-button').forEach(button => {
-
     document.getElementById('imageBtn1').addEventListener('click', () => {
         changeEarthTexture(colorTexture);
         updateSelectedButton('imageBtn1');

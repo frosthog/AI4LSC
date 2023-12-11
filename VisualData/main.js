@@ -1,5 +1,5 @@
 
-import { featureStates, buttonStates, selectedMode } from './UI.js';
+import { featureStates, buttonStates, selectedMode, selectedFeatures} from './UI.js';
 
 let allCSVData = null;
 let currentInstancedMesh = null;
@@ -102,9 +102,7 @@ export function toggleDirectionalLight()
 
 export function setSphereSize(newSize, year)
 {
-    
     sphereSize = newSize;
-    console.log(`Updating sphere size to: ${sphereSize}`);
     displayData(year);
 }
 
@@ -133,18 +131,11 @@ function latLongToVector3(lat, long, radius)
     return new THREE.Vector3(x, y, z);
 }
 
-
 function createInstances(data, radius)
 {
-    console.log("IN create Instances");
     removeAllInstances();
 
     const selectedFeature = getSelectedFeature();
-    if (!selectedFeature)
-    {
-        console.log("return if no selectedFeatures");
-        return;
-    }
 
     sphereGeometry = new THREE.SphereGeometry(sphereSize, 8, 8);
     sphereMaterial = new THREE.MeshBasicMaterial();
@@ -154,12 +145,21 @@ function createInstances(data, radius)
 
     let i = 0;
     data.forEach(point => {
-        if (!isNaN(point.LAT) && !isNaN(point.LONG) && selectedFeature in point)
+        let color;
+        if (selectedMode === 'comparisonBtn')
+        {
+            const difference = point['comparison'];
+            color = new THREE.Color(difference, 0, 1 - difference);
+        }
+        else if (selectedMode === 'simpleValueBtn' && selectedFeature in point)
+        {
+            const featureValue = point[selectedFeature];
+            color = new THREE.Color(featureValue, 0, 1 - featureValue);
+        }
+
+        if (color)
         {
             const position = latLongToVector3(point.LAT, point.LONG, radius);
-            const featureValue = point[selectedFeature];
-            const color = new THREE.Color(featureValue, 0, 1 - featureValue);
-
             const matrix = new THREE.Matrix4();
             matrix.setPosition(position);
             currentInstancedMesh.setColorAt(i, color);
@@ -195,19 +195,46 @@ function parseCSV(csvData, specificYear)
     const longIndex = headers.indexOf('LONG');
     const surveyYearIndex = headers.indexOf('SURVEY_YEAR');
 
-    if (latIndex === -1 || longIndex === -1 || surveyYearIndex === -1) {
+    if (latIndex === -1 || longIndex === -1 || surveyYearIndex === -1)
+    {
         console.error('LAT, LONG, and/or SURVEY_YEAR columns not found');
         return;
     }
 
-    // Value mode
     let featureIndexes = {};
-    if (selectedMode === 'simpleValueBtn')
+    let comparisonFeatures = [];
+
+    //console.log(featureStates);
+
+    if (selectedMode === 'comparisonBtn')
+    {
+        comparisonFeatures = [];
+        const featureButtons = document.querySelectorAll('input[name="feature"]');
+    
+        featureButtons.forEach(button => {
+            const featureName = button.value;
+            if (featureStates[featureName.toLowerCase()])
+            {
+                const featureIndex = headers.indexOf(featureName);
+                //console.log("featureName: ", featureName);
+                //console.log("featureIndex: ", featureIndex);
+    
+                if (featureIndex !== -1 && comparisonFeatures.length < 2)
+                {
+                    featureIndexes[featureName.toLowerCase()] = featureIndex;
+                    comparisonFeatures.push(featureName.toLowerCase());
+                    //console.log("COMPCOMP: ", comparisonFeatures);
+                }
+            }
+        });
+    }
+    else if (selectedMode === 'simpleValueBtn')
     {
         const featureButtons = document.querySelectorAll('input[name="feature"]');
         featureButtons.forEach(button => {
             const featureName = button.value;
-            if (featureStates[featureName.toLowerCase()]) {
+            if (featureStates[featureName.toLowerCase()])
+            {
                 const featureIndex = headers.indexOf(featureName);
                 featureIndexes[featureName.toLowerCase()] = featureIndex;
             }
@@ -223,17 +250,29 @@ function parseCSV(csvData, specificYear)
             SURVEY_YEAR: parseInt(values[surveyYearIndex], 10)
         };
 
-        Object.keys(featureIndexes).forEach(feature => {
-            if (featureIndexes[feature] !== -1) {
-                pointData[feature] = parseFloat(values[featureIndexes[feature]]);
-            }
-        });
+        if (selectedMode === 'comparisonBtn' && comparisonFeatures.length === 2)
+        {
+            const featureValue1 = parseFloat(values[featureIndexes[comparisonFeatures[0]]]);
+            const featureValue2 = parseFloat(values[featureIndexes[comparisonFeatures[1]]]);
+            pointData['comparison'] = Math.abs(featureValue1 - featureValue2);
+        }
+        else if (selectedMode === 'simpleValueBtn')
+        {
+            Object.keys(featureIndexes).forEach(feature => {
+                if (featureIndexes[feature] !== -1)
+                {
+                    pointData[feature] = parseFloat(values[featureIndexes[feature]]);
+                }
+            });
+        }
 
         return pointData;
     }).filter(point => point.SURVEY_YEAR === specificYear);
 
+    //console.log(data);
     processData(data);
 }
+
 
 let lastProcessedFeature = null;
 let lastProcessedYear = null;
@@ -246,7 +285,6 @@ function getSelectedFeature()
 
 function processAndDisplayData(year)
 {
-    console.log("IN process and display data");
     const selectedFeature = getSelectedFeature();
     if (allCSVData && (lastProcessedFeature !== selectedFeature || lastProcessedYear !== year))
     {
@@ -258,7 +296,6 @@ function processAndDisplayData(year)
 
 function processData(data)
 {
-    console.log("IN process data");
     currentData = data;
     createInstances(data, 1.5);
 }
@@ -277,7 +314,6 @@ export function displayData(year)
 {
     if (!allCSVData)
     {
-        console.log("loadCSV");
         loadCSV('prediction.csv').then(csvData => {
             allCSVData = csvData;
             processAndDisplayData(year);
@@ -291,7 +327,6 @@ export function displayData(year)
         }
         else
         {
-            console.log("inDisplayData");
             processData(currentData);
         }
     }

@@ -234,25 +234,24 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-bottom: 10px; /* Space between image buttons and toggle light button */
+    margin-bottom: 10px;
 }
 
 .control-panel .image-button {
-    background-color: #333; /* Default background color */
-    border: 1px solid #fff; /* White border for the buttons */
-    width: 50px; /* Square shape */
+    background-color: #333;
+    border: 1px solid #fff;
+    width: 50px;
     height: 50px;
     cursor: pointer;
-    margin: 0 5px; /* Space between buttons */
-    background-size: cover; /* Ensure images cover the whole button */
-    background-position: center; /* Center images */
+    margin: 0 5px;
+    background-size: cover;
+    background-position: center;
 }
 
 .control-panel .image-button.selected {
-    border-color: #00ff00; /* Highlight color for selected button */
+    border-color: #00ff00;
 }
 
-/* Specific background images for each button */
 #imageBtn1 { background-image: url('textures/mini-earth.PNG'); }
 #imageBtn2 { background-image: url('textures/mini-earth-blackwhite.png'); }
 #imageBtn3 { background-image: url('textures/mini-earth-noTex.png'); }

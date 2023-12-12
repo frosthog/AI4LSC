@@ -12,7 +12,7 @@ The main idea was to provide an approach for exploration of soil data to gain ne
 
 ### Data source
 
-The data source was the LUCAS data from the years 2009, 2015, 2018 provided by the challangers located in <data/raw_data>. The microbiome sequencing data was not used due to time constraint of the participants.
+The data source was the [LUCAS data](data/raw_data) from the years 2009, 2015, 2018 provided by the challangers. The microbiome sequencing data was not used due to time constraint.
 
 ### Data cleaning
 
@@ -27,8 +27,31 @@ The process written in [LUCAS_Soil_Data_Overview.ipynb](data/LUCAS_Soil_Data_Ove
 ![image](data/soil-merged-missing-data.png)
 *Figure 1: Overview of missing data represented as a black line*
 
-### Feature engineering
+The correlation matrix shows linear correlation between each feature. The following observations were made:
 
+* pH H20 and pH CaCl2 had a correlation of 0.99 which means they have almost perfekt linear correlation. Therefore pH CaCl2 was taken out as a feature as it does not provide any new information.
+* N and OC have a linear correlation of 0.91
+* LAT(itude) and pH H20 have a linear correlation of 0.62
+
+For a prediction feature we choose **CaCO3** as it has some missing data as shown in Figure 1 and has some correlations with different other features.
+
+![image](data/soil-merged-correlation-matrix.png)
+*Figure 2: Correlation matrix of the existing features higher than 0.2*
+
+### Feature Engineering
+
+To predict CaCO3 further steps where taken to possibly improve a prediction model. For this additional features where generated. In this step the previously generated [soil-merged.csv](data/soil-merged.csv) was used by the [feature_engineering.py](data/feature_engineering.py) script to generate additional columns that can be used as input for ML model.
+
+The idea was to also include the CaCO3 values of neighboring LUCAS points to improve prediction the CaCO3 of a LUCAS point. The assumption was that the soil is mostly continous and not changing apruptly. The first step was to use a nearest neighbor algorithm based on longitude and latitude to find the nearest neighbors for each point. Figure 3, 4 and 5 show the connections of each point as a check if the implentation works as intended. After that the POINT_ID where identified CaCO3 values where read and put as additional columns for each LUCAS points. The 4 nearest LUCAS points were chosen. The script produces the [ml_soil.csv](data/ml_soil.csv) that was used as a base for the machine learning model.
+
+![image](data/nn_graph_2009.png)
+*Figure 3: Nearest neighbor for 2009 LUCAS points*
+
+![image](data/nn_graph_2015.png)
+*Figure 4: Nearest neighbor for 2015 LUCAS points*
+
+![image](data/nn_graph_2018.png)
+*Figure 5: Nearest neighbor for 2018 LUCAS points*
 
 ## Visualization
 

@@ -1,6 +1,40 @@
 # AI4LSC
 
+## Introduction
 
+This readme serves as documentation for the project submission.
+
+## Concept
+
+The main idea was to provide an approach for exploration of soil data to gain new insight of correlation with the use of modern technologies. For this a data analysis was conducted with machine learning and a 3d visualtion tool that can be used from any modern browser. These two components are described in the following sections.
+
+## Data Analysis
+
+### Data source
+
+The data source was the LUCAS data from the years 2009, 2015, 2018 provided by the challangers located in <data/raw_data>. The microbiome sequencing data was not used due to time constraint of the participants.
+
+### Data cleaning
+
+The data had to be cleaned first to make it uniform between the three years. The following steps were done:
+
+* The columns in the csv had different naming that needed to be understood and related to the other csv files with the information provided in the LUCAS reports.
+* Duplicate or columns with lots of missing data were excluded.
+* All values which where out of LOD were considered null as it was not clear to us if the data was really out of LOD or missing.
+
+The process written in <data/LUCAS_Soil_Data_Overview.ipynb> does this and creates and output file <data/soil-merged.csv>
+
+The following graph shows the missing data (black) of the file:
+![image](data/soil-merged-missing-data.png)
+*Figure 1: Overview of missing data represented as a black line*
+
+### Feature engineering
+
+
+## Visualization
+
+
+## Possible next steps
 
 ## Data
 

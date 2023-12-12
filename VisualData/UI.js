@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 function createPointUI(lat, lon)
 {
-    console.log(`Creating point at Latitude: ${lat}, Longitude: ${lon}`);
+    //console.log(`Creating point at Latitude: ${lat}, Longitude: ${lon}`);
     createNewPoint(lat, lon, 1.501);
 }
 
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 function handleYearChange(year)
 {
-    console.log(`Selected Year: ${year}`);
+    //console.log(`Selected Year: ${year}`);
     selectedYear = year;
     displayData(year);
 }
@@ -116,38 +116,42 @@ function updateFeatureSelectionMode()
     {
         if (selectedFeatures.length === 0)
         {
+            console.log("NOW")
             selectedFeatures = featureStates['coarse'] ? ['coarse'] : [Object.keys(featureStates)[0]];
         }
         else
         {
             selectedFeatures = selectedFeatures.slice(0, 1);
         }
-        updateFeatureStatesForValueMode();
+        updateFeatureStates();
     }
     else if (selectedMode === 'comparisonBtn')
     {
         selectedFeatures = ['coarse', 'clay'];
-        updateFeatureStatesForComparisonMode();
+        updateFeatureStatesForComparison();
     }
     else if (selectedMode === 'additionBtn')
     {
-
+        updateFeatureStatesForAddition();
     }
 }
 
-function updateFeatureStatesForValueMode()
+function updateFeatureStates(selectedFeature)
 {
-    Object.keys(featureStates).forEach(feature => {
-        featureStates[feature] = false;
-    });
-    featureStates[selectedFeatures[0]] = true;
+    Object.keys(featureStates).forEach(key => featureStates[key] = false);
+    featureStates[selectedFeature] = true;
 }
 
-function updateFeatureStatesForComparisonMode()
+function updateFeatureStatesForComparison()
 {
-    Object.keys(featureStates).forEach(feature => {
-        featureStates[feature] = (selectedFeatures.includes(feature));
-    });
+    Object.keys(featureStates).forEach(key => featureStates[key] = false);
+    selectedFeatures.forEach(feature => featureStates[feature] = true);
+}
+
+function updateFeatureStatesForAddition()
+{
+    Object.keys(featureStates).forEach(key => featureStates[key] = false);
+    selectedFeatures.forEach(feature => featureStates[feature] = true);
 }
 
 function handleFeatureButtonClick(event)
@@ -197,21 +201,16 @@ function toggleFeatureSelection(featureName)
     }
     else if (selectedMode === 'additionBtn')
     {
-
+        if (index === -1)
+        {
+            selectedFeatures.push(featureName);
+        }
+        else
+        {
+            selectedFeatures.splice(index, 1);
+        }
+        updateFeatureStatesForAddition();
     }
-    //console.log("Selected Features:", selectedFeatures);
-}
-
-function updateFeatureStates(selectedFeature)
-{
-    Object.keys(featureStates).forEach(key => featureStates[key] = false);
-    featureStates[selectedFeature] = true;
-}
-
-function updateFeatureStatesForComparison()
-{
-    Object.keys(featureStates).forEach(key => featureStates[key] = false);
-    selectedFeatures.forEach(feature => featureStates[feature] = true);
 }
 
 
@@ -236,13 +235,13 @@ function updateTextContainer(selectedButtonId)
     let text = "";
     switch (selectedButtonId) {
         case 'simpleValueBtn':
-            text = "Display color for each feature [choose only one feature]";
+            text = "Single Feature Mode: Visualize a single selected feature's data across all points.";
             break;
         case 'comparisonBtn':
-            text = "Display the difference between 2 features [choose 2 features]";
+            text = "Feature Comparison Mode: Compare two selected features and visualize the difference.";
             break;
         case 'additionBtn':
-            text = "Display a mix of features [select several features]";
+            text = "Feature Aggregation Mode: Aggregate and display the average of multiple selected features.";
             break;
         default:
             text = "Select a button.";

@@ -156,6 +156,11 @@ function createInstances(data, radius)
             const featureValue = point[selectedFeature];
             color = new THREE.Color(featureValue, 0, 1 - featureValue);
         }
+        else if (selectedMode === 'additionBtn')
+        {
+            const addition = point['addition'];
+            color = new THREE.Color(addition, 0, 1 - addition);
+        }
 
         if (color)
         {
@@ -203,8 +208,13 @@ function parseCSV(csvData, specificYear)
 
     let featureIndexes = {};
     let comparisonFeatures = [];
+    let additionFeatures = [];
 
-    //console.log(featureStates);
+    let totalValues = 0;
+    let totalCount = 0;
+
+    // console.log(featureStates);
+    console.log(selectedMode);
 
     if (selectedMode === 'comparisonBtn')
     {
@@ -216,14 +226,11 @@ function parseCSV(csvData, specificYear)
             if (featureStates[featureName.toLowerCase()])
             {
                 const featureIndex = headers.indexOf(featureName);
-                //console.log("featureName: ", featureName);
-                //console.log("featureIndex: ", featureIndex);
     
                 if (featureIndex !== -1 && comparisonFeatures.length < 2)
                 {
                     featureIndexes[featureName.toLowerCase()] = featureIndex;
                     comparisonFeatures.push(featureName.toLowerCase());
-                    //console.log("COMPCOMP: ", comparisonFeatures);
                 }
             }
         });
@@ -237,6 +244,22 @@ function parseCSV(csvData, specificYear)
             {
                 const featureIndex = headers.indexOf(featureName);
                 featureIndexes[featureName.toLowerCase()] = featureIndex;
+            }
+        });
+    }
+    else if (selectedMode === 'additionBtn')
+    {
+        const featureButtons = document.querySelectorAll('input[name="feature"]');
+        featureButtons.forEach(button => {
+            const featureName = button.value;
+            if (featureStates[featureName.toLowerCase()])
+            {
+                const featureIndex = headers.indexOf(featureName);
+                if (featureIndex !== -1)
+                {
+                    featureIndexes[featureName.toLowerCase()] = featureIndex;
+                    additionFeatures.push(featureName.toLowerCase());
+                }
             }
         });
     }
@@ -265,17 +288,29 @@ function parseCSV(csvData, specificYear)
                 }
             });
         }
+        else if (selectedMode === 'additionBtn' && additionFeatures.length > 0)
+        {
+            let sum = 0;
+            additionFeatures.forEach(feature => {
+                const value = parseFloat(values[featureIndexes[feature]]);
+                if (!isNaN(value))
+                {
+                    sum += value;
+                    totalValues += value;
+                    totalCount++;
+                }
+            });
+            const average = sum / additionFeatures.length;
+            pointData['addition'] = average;
+        }
 
         return pointData;
     }).filter(point => point.SURVEY_YEAR === specificYear);
 
-    //console.log(data);
+    // console.log(data);
     processData(data);
 }
 
-
-let lastProcessedFeature = null;
-let lastProcessedYear = null;
 let currentData = null;
 
 function getSelectedFeature()
@@ -285,13 +320,8 @@ function getSelectedFeature()
 
 function processAndDisplayData(year)
 {
-    const selectedFeature = getSelectedFeature();
-    if (allCSVData && (lastProcessedFeature !== selectedFeature || lastProcessedYear !== year))
-    {
-        parseCSV(allCSVData, year);
-        lastProcessedFeature = selectedFeature;
-        lastProcessedYear = year;
-    }
+    const selectedFeature = selectedFeatures;
+    parseCSV(allCSVData, year);
 }
 
 function processData(data)
@@ -321,13 +351,6 @@ export function displayData(year)
     }
     else
     {
-        if (year !== lastProcessedYear || getSelectedFeature() !== lastProcessedFeature)
-        {
-            processAndDisplayData(year);
-        }
-        else
-        {
-            processData(currentData);
-        }
+        processAndDisplayData(year);
     }
 }

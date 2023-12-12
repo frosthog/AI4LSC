@@ -83,7 +83,7 @@ The exploration of a machine learning model could provide new insight on correla
 ![image](data/ml-investigation-2.png)
 *Figure 11: The predidiction is pushed down up to a pH H2O of 7. From 7 and above the influence of prediction increases linear.*
 
-![image](data/ml-investigation-2.png)
+![image](data/ml-investigation-3.png)
 *Figure 12: With high K (red) and increasing pH H2O the prediction effect increases in negative direction. While with low K (blue) and increasing pH H2O the effect increases in the positive direction.*
 
 ## Visualization

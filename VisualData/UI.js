@@ -288,3 +288,4 @@ function updateSelectedButton(buttonId)
     document.querySelectorAll('.image-button').forEach(btn => btn.classList.remove('selected'));
     document.getElementById(buttonId).classList.add('selected');
 }
+

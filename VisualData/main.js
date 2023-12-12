@@ -354,3 +354,79 @@ export function displayData(year)
         processAndDisplayData(year);
     }
 }
+
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
+let selectedPointIndex = null;
+
+function onMouseMove(event)
+{
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    let intersects = currentInstancedMesh ? raycaster.intersectObject(currentInstancedMesh) : [];
+
+    if (intersects.length > 0)
+    {
+        const tempSelectedPointIndex = intersects[0].instanceId;
+        if (selectedPointIndex == null)
+        {
+
+        }
+        else if (tempSelectedPointIndex != selectedPointIndex)
+        {
+            console.log('Out of point');
+            showPointData(null);
+            selectedPointIndex = null;
+        }
+    }
+    else
+    {
+        if (selectedPointIndex !== null)
+        {
+            console.log('Out of point');
+            showPointData(null);
+            selectedPointIndex = null;
+        }
+    }
+}
+
+function onMouseClick(event)
+{
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    let intersects = currentInstancedMesh ? raycaster.intersectObject(currentInstancedMesh) : [];
+
+    if (intersects.length > 0)
+    {
+        selectedPointIndex = intersects[0].instanceId;
+        console.log('Clicked Point Index:', selectedPointIndex);
+        showPointData(selectedPointIndex);
+    }
+}
+
+renderer.domElement.addEventListener('mousemove', onMouseMove, false);
+renderer.domElement.addEventListener('click', onMouseClick, false);
+
+
+function showPointData(index)
+{
+    const container = document.getElementById('pointDataContainer');
+    if (currentData && index !== null && index < currentData.length)
+    {
+        const pointData = currentData[index];
+        container.innerHTML = Object.entries(pointData)
+            .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+            .join('<br>');
+        container.style.display = 'block';
+    }
+    else
+    {
+        container.style.display = 'none';
+    }
+}

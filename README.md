@@ -5,7 +5,7 @@
 ## Introduction
 
 This readme serves as documentation for the project submission.
-You can access the visualization system on [here](http://152.228.142.81:4545/) or use http-server to run it locally.
+You can access the visualization system [here](http://152.228.142.81:4545/) or use http-server to run it locally.
 
 ## Concept
 

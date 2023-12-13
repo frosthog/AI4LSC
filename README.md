@@ -1,5 +1,7 @@
 # AI4LSC
 
+![image](VisualData/visu-demo.PNG)
+
 ## Introduction
 
 This readme serves as documentation for the project submission.
@@ -92,7 +94,7 @@ The exploration of a machine learning model could provide new insight on correla
 
 The visualization uses imputed data of the [soil-merged.csv](data/soil-merged.csv). This was created by basic KNN imputation [soil_imputation_knn.py](data/soil_imputation_knn.py) to use as a base for visualization.
 
-## Obsolete - Used when we started - CSV Merger C++ [./csv_merger_source]
+## Obsolete - Used when we started - CSV Merger C++ -- [code](./csv_merger_source)
 
 
 This program is designed to merge data from multiple CSV files into a single file, focusing specifically on columns that are common across all the files. It does this by first reading the headers (the first line in each file, which contains the column names) from three different CSV files.

@@ -255,3 +255,15 @@ body {
 #imageBtn1 { background-image: url('textures/mini-earth.PNG'); }
 #imageBtn2 { background-image: url('textures/mini-earth-blackwhite.png'); }
 #imageBtn3 { background-image: url('textures/mini-earth-noTex.png'); }
+
+.pointDataContainer {
+    display: none;
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.88);
+    border: 1px solid black;
+    padding: 10px;
+    max-width: 300px;
+    overflow-y: auto;
+}

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 function createPointUI(lat, lon)
 {
-    //console.log(`Creating point at Latitude: ${lat}, Longitude: ${lon}`);
+    console.log(`Creating point at Latitude: ${lat}, Longitude: ${lon}`);
     createNewPoint(lat, lon, 1.501);
 }
 
@@ -116,7 +116,6 @@ function updateFeatureSelectionMode()
     {
         if (selectedFeatures.length === 0)
         {
-            console.log("NOW")
             selectedFeatures = featureStates['coarse'] ? ['coarse'] : [Object.keys(featureStates)[0]];
         }
         else
@@ -235,13 +234,13 @@ function updateTextContainer(selectedButtonId)
     let text = "";
     switch (selectedButtonId) {
         case 'simpleValueBtn':
-            text = "Single Feature Mode: Visualize a single selected feature's data across all points.";
+            text = "Single Feature Mode: Visualize a single selected feature's data across all points. Red: high - Blue: low";
             break;
         case 'comparisonBtn':
-            text = "Feature Comparison Mode: Compare two selected features and visualize the difference.";
+            text = "Feature Comparison Mode: Compare two selected features and visualize the difference.Red: high diff - Blue: low diff";
             break;
         case 'additionBtn':
-            text = "Feature Aggregation Mode: Aggregate and display the average of multiple selected features.";
+            text = "Feature Aggregation Mode: Aggregate and display the average of multiple selected features. Red: high - Blue: low";
             break;
         default:
             text = "Select a button.";

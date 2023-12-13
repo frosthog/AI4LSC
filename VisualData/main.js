@@ -214,7 +214,7 @@ function parseCSV(csvData, specificYear)
     let totalCount = 0;
 
     // console.log(featureStates);
-    console.log(selectedMode);
+    //console.log(selectedMode);
 
     if (selectedMode === 'comparisonBtn')
     {
@@ -377,7 +377,7 @@ function onMouseMove(event)
         }
         else if (tempSelectedPointIndex != selectedPointIndex)
         {
-            console.log('Out of point');
+            //console.log('Out of point');
             showPointData(null);
             selectedPointIndex = null;
         }
@@ -386,7 +386,7 @@ function onMouseMove(event)
     {
         if (selectedPointIndex !== null)
         {
-            console.log('Out of point');
+            //console.log('Out of point');
             showPointData(null);
             selectedPointIndex = null;
         }
@@ -405,7 +405,7 @@ function onMouseClick(event)
     if (intersects.length > 0)
     {
         selectedPointIndex = intersects[0].instanceId;
-        console.log('Clicked Point Index:', selectedPointIndex);
+        //console.log('Clicked Point Index:', selectedPointIndex);
         showPointData(selectedPointIndex);
     }
 }
@@ -413,17 +413,31 @@ function onMouseClick(event)
 renderer.domElement.addEventListener('mousemove', onMouseMove, false);
 renderer.domElement.addEventListener('click', onMouseClick, false);
 
-
 function showPointData(index)
 {
     const container = document.getElementById('pointDataContainer');
-    if (currentData && index !== null && index < currentData.length)
+
+    if (allCSVData && index !== null)
     {
-        const pointData = currentData[index];
-        container.innerHTML = Object.entries(pointData)
-            .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
-            .join('<br>');
-        container.style.display = 'block';
+        const rows = allCSVData.split('\n');
+        if (index < rows.length - 1)
+        {
+            const headers = rows[0].split(',');
+            const values = rows[index + 1].split(',');
+            const pointData = headers.reduce((obj, header, i) => {
+                obj[header] = values[i];
+                return obj;
+            }, {});
+
+            container.innerHTML = Object.entries(pointData)
+                .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+                .join('<br>');
+            container.style.display = 'block';
+        }
+        else
+        {
+            container.style.display = 'none';
+        }
     }
     else
     {

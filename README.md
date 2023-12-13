@@ -86,13 +86,130 @@ The exploration of a machine learning model could provide new insight on correla
 ![image](data/ml-investigation-3.png)
 *Figure 12: With high K (red) and increasing pH H2O the prediction effect increases in negative direction. While with low K (blue) and increasing pH H2O the effect increases in the positive direction.*
 
-## Visualization
+# DATA CLEANING - PRE-VISUALIZATION
 
 ### Data source
 
 The visualization uses imputed data of the [soil-merged.csv](data/soil-merged.csv). This was created by basic KNN imputation [soil_imputation_knn.py](data/soil_imputation_knn.py) to use as a base for visualization.
 
-tbd
+## Obsolete - Used when we started - CSV Merger C++ [./csv_merger_source]
+
+
+This program is designed to merge data from multiple CSV files into a single file, focusing specifically on columns that are common across all the files. It does this by first reading the headers (the first line in each file, which contains the column names) from three different CSV files.
+
+After identifying the common columns in these files, the program creates a new CSV file where it compiles the data.
+This new file starts with a 'Year' column, followed by the data from the common columns for each year. It goes through each of the original files, line by line, extracting and writing the relevant data to this new file.
+
+
+## Obsolete - Used when we started - CSV NORMALIZER C++ -- [code](./csv_float_normalizer_source)
+
+This program is designed to normalize the data in a CSV file, merged_data.csv, and output the results into a new file, normalized_data.csv.
+The normalization process adjusts the values in the dataset so that they are on a common scale, typically to make the data more suitable for analysis or further processing.
+
+The program starts by reading the header line from the input file and writes it unchanged to the output file. It then proceeds to read the rest of the data, line by line. During this process, it performs two main tasks:
+
+*Data Collection and Min-Max Identification:
+
+It splits each line into individual data points then checks if the data can be converted to a float and updates the minimum and maximum values found for each column. These min-max values are used later in the normalization process.
+
+*Normalization and Output:
+
+The program iterates over the collected data, for each value if it's a valid float, it normalizes the value. The normalization formula used is (value - minValue) / (maxValue - minValue), which scales the value between 0 and 1.
+
+
+## CSV NORMALIZER JS -- [code](./predictions/csvNorm)
+
+This program normalizes and filters data from a CSV file, soil_imputed_data.csv, and then creates a new CSV file, normalized_clean.csv, with the processed data. It uses the Papa Parse lib to parse the CSV file. The program's functionalities are data normalization, filtering based on the wanted criteria, and exporting the processed data to a new CSV file.
+
+*Normalization Function :
+
+It takes a value and its respective minimum and maximum values, normalizes it to a scale between 0 and 1, and returns the normalized value rounded to five decimal places.
+
+*Data Processing :
+
+The program identifies specific columns in the dataset to be normalized, such as 'Coarse', 'Clay', 'Silt', then groups the data by POINT_ID, ensuring that each group represents data from the same point.
+The data is filtered to include only those points that have data for the required years (2009, 2015, 2018). Points not meeting this criterion are logged and excluded.
+For each column designated for normalization, it calculates the minimum and maximum values across the filtered dataset. The data is then mapped, converting each row into a format where the specified columns are normalized using the normalize function
+
+
+## ML_PRED JS -- [code](./predictions/ML_pred)
+
+This JavaScript program was initially intended to use machine learning techniques to predict soil data for several years into the future, using a dataset spanning only three years (2009, 2015, and 2018). The goal was to forecast values for various soil properties like Coarse, Clay, Silt, Sand, pH, etc., based on existing patterns. However, due to the limited scope of the data, the machine learning approach proved inadequate for making accurate predictions.
+
+###Intended Machine Learning Approaches:
+
+*Linear Regression:
+This method could have been used to predict future values by assuming a linear relationship between the year and each soil property. However, linear models are too simplistic for capturing complex environmental data patterns.
+
+*Polynomial Regression:
+A more complex model that could have been used to fit a non-linear relationship between the year and soil properties. This might have been more suitable for environmental data which often has non-linear characteristics but the tests didn't give any accurate results.
+
+*Time Series Analysis: Techniques like ARIMA (AutoRegressive Integrated Moving Average) could have been appropriate for forecasting based on time series data. These models are adept at capturing trends, seasonality, and other temporal dynamics in data but it has not been tested yet.
+
+*The Challenge and Alternative Approach:
+The main challenge was the inadequacy of data. Machine learning models generally require large datasets to learn patterns accurately. With only three data points per feature, the models likely struggled to identify reliable patterns, leading to poor predictive performance.
+
+As a workaround, the program resorts to a randomized approach for generating data for the missing years.
+
+### Random Value Generation:
+
+For each feature, it calculates the minimum and maximum values observed across the three years.
+For years without data (from 2009 to 2050), it generates random values within these min-max ranges for each feature, ensuring that the values stay within a plausible range.
+
+It processes the data by grouping it by POINT_ID, maintaining geographic consistency. For each missing year in a point ID, it generates a new data row with randomized values for each feature. The data is then formatted, sorted by year, and combined into a single dataset.
+
+While the initial plan was to use sophisticated machine learning methods to predict soil data over several years, the lack of sufficient historical data led to the adoption of a more straightforward randomization approach within coherent value ranges. This method ensured the generation of a comprehensive dataset (without the predictive accuracy that machine learning could have provided) to feed the visualization system.
+
+
+## VISUALIZATION JS/THREEJS -- [code](./VisualData)
+
+The system is an interactive 3D visualization tool that displays geographical data points on a virtual globe. Each point represents specific data collected from various locations across the globe.
+
+### Features:
+
+*Color-Coded Data Points:
+Each point on the globe is color-coded to represent different data values. The color intensity changes based on the data's magnitude, providing a quick visual understanding of the data's nature.
+
+*Single Feature Mode:
+Visualizes data for a single selected feature across all points. Each point’s color represents the normalized value of this feature.
+
+*Feature Comparison Mode:
+Compares two selected features. The color difference between points illustrates the comparative values of these features.
+
+*Feature Aggregation Mode:
+Shows an average of multiple selected features. This mode aggregates data from multiple features and displays an averaged value.
+
+*Interactive Year Selection:
+Users can choose a specific year to view data from that year, allowing for a temporal analysis of changes and trends over time.
+
+*Interactive Globe:
+The virtual globe can be rotated and zoomed, enabling users to focus on specific geographic regions or get a global overview.
+
+*Point Selection:
+Clicking on a point displays detailed data about that location, enhancing the tool's interactivity and providing in-depth information.
+
+### Tech:
+
+*3D Rendering with THREE.js:
+The globe is rendered using THREE.js, a WebGL library.
+Data points are represented as instanced meshes objects which optimizes the render to keep the perfomances high.
+
+*Data Handling and Parsing:
+The system parses CSV data using a custom parseCSV function. This function extracts and processes data for each year and mode.
+Data is dynamically loaded and visualized based on the selected year and mode.
+
+*Raycasting for Interactivity:
+The system uses THREE.js raycasting to detect mouse interactions with the 3D objects (data points).
+Clicking on a point triggers a function that displays detailed data for that point.
+
+*Mode-Specific Logic:
+Each mode has a unique way of processing and visualizing data.
+The color of each point is determined based on the current mode and the data associated with that point.
+
+*Responsive Design:
+The visualization adjusts to different screen sizes and window resizing, ensuring a consistent user experience across devices.
+
+This system is a sophisticated yet user-friendly tool that leverages 3D visualization to present geographical data in an interactive and informative manner. Its versatility in displaying different data types and temporal data makes it an interesting tool for data analysis and geographic information systems.
 
 ## Conclusion and possible next steps
 

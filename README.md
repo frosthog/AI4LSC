@@ -96,7 +96,7 @@ tbd
 
 ## Conclusion and possible next steps
 
-While the models performance with an R2-score of 0.70 is not high, the exploration method can get new insight on model behaviour. This can be used as an explorative way to understand the model better and maybe even see new correlation or patterns. While this only shows correlation this could be used to start new research to investigate causality.
+The models performance with an R2-score of 0.70 for CaCO3 prediction needs to be improved. LUCAS data of additional years and further investigation is needed to improve it. Also the possibity to predict other features like P or N can be investigated and what kind of data is necessary to do it. Maybe other data such as microbiome or meteorolical data is needed to predict such values accurately. The model exploration method can get new insight on model behaviour, that is espacially interesting with better performing models. This can be used as an explorative way to understand the model better and maybe even see new correlation or patterns. While this only shows correlation this could be used to start research investigating causality.
 
 None of the team members where experts in soil, so some assumptions that were done in the project might not be ideal. The assumption that soil changes continously may be correct for untouched soil, but not for farming land. There is probably a strong break between a LUCAS point in a natural reserve and a neighboring point that is on farmland. For this the feature engineering needs to be improved to somehow consider this. Maybe considering the land use of the neighboring LUCAS and own LUCAS point a model could create some kind of simalarity matrix.
 
